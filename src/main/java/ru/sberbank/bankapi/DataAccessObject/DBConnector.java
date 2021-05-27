@@ -18,7 +18,7 @@ public class DBConnector {
             con = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             return 1;
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace(); // обработка ошибок  DriverManager.getConnection
+            e.printStackTrace();
             System.out.println("Ошибка SQL !");
             return 0;
         }

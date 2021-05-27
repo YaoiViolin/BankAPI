@@ -34,13 +34,16 @@ public class CardImpl implements Card {
         return account;
     }
 
+    public int addMoney() {
+        return 0;
+    }
+
     @Override
     public String toString() {
         return "CardImpl{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", balance=" + balance +
-                ", account=" + account +
                 '}';
     }
 }

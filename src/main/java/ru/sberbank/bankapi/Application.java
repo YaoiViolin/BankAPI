@@ -1,13 +1,9 @@
 package ru.sberbank.bankapi;
 
 import ru.sberbank.bankapi.DataAccessObject.DBConnector;
-import ru.sberbank.bankapi.DataAccessObject.domain.AccountImpl;
-import ru.sberbank.bankapi.DataAccessObject.domain.ClientImpl;
-import ru.sberbank.bankapi.DataAccessObject.repo.Account;
-import ru.sberbank.bankapi.DataAccessObject.repo.Card;
-import ru.sberbank.bankapi.DataAccessObject.repo.Client;
+import ru.sberbank.bankapi.DataAccessObject.domain.*;
+import ru.sberbank.bankapi.DataAccessObject.repo.*;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 
@@ -25,8 +21,12 @@ public class Application {
     public static void main(String[] args) {
         DBConnector connector = new DBConnector();
         connector.createConnection();
-        Client client = new ClientImpl();
-
+        Client client = new ClientImpl(1, "RITA");
+        List<Account> accounts = client.getAccounts();
+        Account account = accounts.get(0);
+        List<Card> cards = account.getCardsList();
+        cards.forEach(System.out::println);
+        Card card = cards.get(0);
         connector.closeConnection();
 
     }
