@@ -1,6 +1,7 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import ru.sberbank.bankapi.DataAccessObject.DBConnector;
 import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
 import ru.sberbank.bankapi.DataAccessObject.repo.CardRepo;
 
@@ -39,6 +40,8 @@ public class Account implements AccountRepo {
 
     @Override
     public List<Card> getCards() {
+        DBConnector connector = new DBConnector();
+        connector.createConnection();
         cards = new ArrayList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CARD WHERE ACCOUNT_ID = ?");
@@ -52,6 +55,7 @@ public class Account implements AccountRepo {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        connector.closeConnection();
         return cards;
     }
 
