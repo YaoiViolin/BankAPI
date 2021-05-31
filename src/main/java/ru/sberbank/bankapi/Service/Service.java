@@ -1,16 +1,20 @@
 package ru.sberbank.bankapi.Service;
 
+import ru.sberbank.bankapi.DataAccessObject.domain.Account;
+import ru.sberbank.bankapi.DataAccessObject.domain.Card;
+import ru.sberbank.bankapi.DataAccessObject.domain.Client;
 import ru.sberbank.bankapi.DataAccessObject.repo.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface Service {
-    public int addMoneyToCard(int sum, Card card);
+    int addMoneyToCard(BigDecimal sum, String number);
 
-    public int getBalance(Card card);
+    BigDecimal getBalance(String cardNumber);
 
-    public List<Card> getAllCards(Account account);
+    String getAllCards(String clientLogin);
 
-    public int createNewCard(Account account);
+    int createNewCard(Account account);
 
 }

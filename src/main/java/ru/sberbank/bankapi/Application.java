@@ -1,34 +1,53 @@
 package ru.sberbank.bankapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.sberbank.bankapi.Controller.ObjectToJsonConverter;
+import ru.sberbank.bankapi.Controller.Server;
 import ru.sberbank.bankapi.DataAccessObject.DBConnector;
 import ru.sberbank.bankapi.DataAccessObject.domain.*;
 import ru.sberbank.bankapi.DataAccessObject.repo.*;
+import ru.sberbank.bankapi.Service.Service;
+import ru.sberbank.bankapi.Service.ServiceImpl;
 
-import java.sql.*;
+import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
+import java.io.IOException;
+
+
 public class Application {
-    public static final String DB_URL = "jdbc:h2:/Users/u19223229/IdeaProjects/BankAPI/src/main/java/ru/sberbank/bankapi/db/MainDataBase";
-    public static final String USER = "user";
-    public static final String PASSWORD = "password";
 
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
 
-    public static final String DB_Driver = "org.h2.Driver";
+    public static void main(String[] args) throws IOException {
+//        Server server = new Server();
+//        server.startServer();
 
-    public static void main(String[] args) {
+
         DBConnector connector = new DBConnector();
         connector.createConnection();
-        Client client = new ClientImpl(1, "RITA");
-        List<Account> accounts = client.getAccounts();
-        Account account = accounts.get(0);
-        List<Card> cards = account.getCardsList();
-        cards.forEach(System.out::println);
-        Card card = cards.get(0);
+
+
+        Service service = new ServiceImpl();
+        //System.out.println(service.getBalance("1234123412341234"));
+        //service.addMoneyToCard(BigDecimal.TEN, "1234123412341234");
+        //System.out.println(service.getBalance("1234123412341234"));
+//        Client client = Client.getClient("RITA");
+//        List<Account> accounts = client.getAccounts();
+//        Account account = accounts.get(0);
+//        List<Card> card;
+
+        String str = service.getAllCards("RITA");
+
+        System.out.println(str);
+
         connector.closeConnection();
 
-    }
 
+    }
 }
+
+
+
+

@@ -1,9 +1,8 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
-import ru.sberbank.bankapi.DataAccessObject.DBConnector;
-import ru.sberbank.bankapi.DataAccessObject.repo.Account;
-import ru.sberbank.bankapi.DataAccessObject.repo.Card;
-import ru.sberbank.bankapi.DataAccessObject.repo.Client;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
+import ru.sberbank.bankapi.DataAccessObject.repo.CardRepo;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -13,21 +12,20 @@ import java.util.List;
 
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
-public class AccountImpl implements Account {
-    private int id;
+@JsonAutoDetect
+public class Account implements AccountRepo {
+    private long id;
     private String number;
     private BigDecimal balance;
-    private Client client;
     private List<Card> cards;
 
-    public AccountImpl(int id, String number, BigDecimal balance, Client client) {
+    public Account(int id, String number, BigDecimal balance) {
         this.id = id;
         this.number = number;
         this.balance = balance;
-        this.client = client;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -39,22 +37,17 @@ public class AccountImpl implements Account {
         return balance;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
     @Override
-    public List<Card> getCardsList() {
+    public List<Card> getCards() {
         cards = new ArrayList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CARD WHERE ACCOUNT_ID = ?");
-            statement.setInt(1, this.id);
+            statement.setLong(1, this.id);
             rs = statement.executeQuery();
             while (rs.next()) {
                 int cardId = rs.getInt("ID");
                 String cardNumber = rs.getString("NUMBER");
-                BigDecimal balance = rs.getBigDecimal("BALANCE");
-                cards.add(new CardImpl(cardId, cardNumber, balance, this));
+                cards.add(new Card(cardId, cardNumber));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -68,7 +61,6 @@ public class AccountImpl implements Account {
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", balance=" + balance +
-                ", client=" + client +
                 ", cards=" + cards +
                 '}';
     }

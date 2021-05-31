@@ -1,8 +1,8 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
-import ru.sberbank.bankapi.DataAccessObject.repo.Account;
-import ru.sberbank.bankapi.DataAccessObject.repo.Card;
-import ru.sberbank.bankapi.DataAccessObject.repo.Client;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
+import ru.sberbank.bankapi.DataAccessObject.repo.ClientRepo;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
@@ -13,13 +13,39 @@ import java.util.List;
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.con;
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
 
-public class ClientImpl implements Client {
+@JsonAutoDetect
+public class Client implements ClientRepo {
     private int id;
     private String login;
 
-    public ClientImpl(int id, String login) {
+    public Client(int id, String login) {
         this.id = id;
         this.login = login;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public static Client getClient(String login) {
+        try {
+            Client client = null;
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM CLIENT WHERE LOGIN = ?");
+            statement.setString(1, login);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                client = new Client(id, login);
+            }
+            return client;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -33,7 +59,7 @@ public class ClientImpl implements Client {
                 int accountId = rs.getInt("ID");
                 String accountNumber = rs.getString("NUMBER");
                 BigDecimal balance = rs.getBigDecimal("BALANCE");
-                accounts.add(new AccountImpl(accountId, accountNumber, balance, this));
+                accounts.add(new Account(accountId, accountNumber, balance));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
