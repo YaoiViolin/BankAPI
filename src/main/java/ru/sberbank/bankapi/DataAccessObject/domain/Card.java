@@ -2,16 +2,15 @@ package ru.sberbank.bankapi.DataAccessObject.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ru.sberbank.bankapi.DataAccessObject.DBConnector;
 import ru.sberbank.bankapi.DataAccessObject.repo.CardRepo;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.con;
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
 @JsonAutoDetect
 public class Card implements CardRepo {
@@ -33,8 +32,6 @@ public class Card implements CardRepo {
 
     @JsonIgnore
     public BigDecimal getBalance() {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT.ID = (SELECT ACCOUNT_ID FROM CARD WHERE CARD.NUMBER = ?)");
             statement.setString(1,this.number);
@@ -43,38 +40,29 @@ public class Card implements CardRepo {
 
             while (rs.next()) {
                 BD = rs.getBigDecimal("BALANCE");
-                System.out.println(BD);
             }
-            connector.closeConnection();
             return BD;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
             return null;
         }
     }
 
     @Override
-    public int updateCardBalance(BigDecimal sum) {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
+    public int setCardBalance(BigDecimal sum) {
         try {
             PreparedStatement statement = con.prepareStatement("UPDATE ACCOUNT SET BALANCE = ? WHERE ACCOUNT.ID = (SELECT ACCOUNT_ID FROM CARD WHERE CARD.NUMBER = ?)");
             statement.setBigDecimal(1, sum);
             statement.setString(2,this.number);
             statement.executeUpdate();
-            connector.closeConnection();
             return 1;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
             return 0;
         }
     }
 
     public static String getLastCardNumber() {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             String number = null;
             Statement statement = con.createStatement();
@@ -82,35 +70,28 @@ public class Card implements CardRepo {
             while (rs.next()) {
                 number = rs.getString("NUMBER");
             }
-            connector.closeConnection();
             return number;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
             return null;
         }
     }
 
     public static int addCard(Card card, long account_id) {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             PreparedStatement statement = con.prepareStatement("INSERT INTO CARD (NUMBER, ACCOUNT_ID) VALUES ( ?, ?)");
             statement.setString(1, card.getNumber());
             statement.setLong(2, account_id);
             statement.executeUpdate();
-            connector.closeConnection();
             return 1;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
+            closeConnection();
             return 0;
         }
     }
 
     public static Card getCard(Long id) {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             Card card = null;
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CARD WHERE ID = ?");
@@ -120,19 +101,16 @@ public class Card implements CardRepo {
                 String number = rs.getString("NUMBER");
                 card = new Card(id, number);
             }
-            connector.closeConnection();
             return card;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
+            closeConnection();
             return null;
         }
 
     }
 
     public static Card getCard(String number) {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             Card card = null;
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CARD WHERE NUMBER = ?");
@@ -142,16 +120,27 @@ public class Card implements CardRepo {
                 long id = rs.getLong("NUMBER");
                 card = new Card(id, number);
             }
-            connector.closeConnection();
             return card;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
+            closeConnection();
             return null;
         }
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return getNumber().equals(card.getNumber());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNumber());
+    }
 
     @Override
     public String toString() {

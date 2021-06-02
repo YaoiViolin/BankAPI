@@ -1,8 +1,6 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import ru.sberbank.bankapi.DataAccessObject.DBConnector;
-import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
 import ru.sberbank.bankapi.DataAccessObject.repo.ClientRepo;
 
 import java.math.BigDecimal;
@@ -10,14 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.con;
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
 @JsonAutoDetect
 public class Client implements ClientRepo {
-    private int id;
-    private String login;
+    private final int id;
+    private final String login;
 
     public Client(int id, String login) {
         this.id = id;
@@ -33,8 +31,6 @@ public class Client implements ClientRepo {
     }
 
     public static Client getClient(String login) {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         try {
             Client client = null;
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CLIENT WHERE LOGIN = ?");
@@ -44,19 +40,15 @@ public class Client implements ClientRepo {
                 int id = rs.getInt("ID");
                 client = new Client(id, login);
             }
-            connector.closeConnection();
             return client;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            connector.closeConnection();
             return null;
         }
     }
 
     @Override
     public List<Account> getAccounts() {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         List<Account> accounts = new ArrayList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE CLIENT_ID = ?");
@@ -71,7 +63,19 @@ public class Client implements ClientRepo {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        connector.closeConnection();
         return accounts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return getLogin().equals(client.getLogin());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLogin());
     }
 }

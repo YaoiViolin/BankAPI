@@ -1,26 +1,25 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import ru.sberbank.bankapi.DataAccessObject.DBConnector;
 import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
-import ru.sberbank.bankapi.DataAccessObject.repo.CardRepo;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
 @JsonAutoDetect
 public class Account implements AccountRepo {
-    private long id;
-    private String number;
-    private BigDecimal balance;
+    private final long id;
+    private final String number;
+    private final BigDecimal balance;
     private List<Card> cards;
 
-    public Account(int id, String number, BigDecimal balance) {
+    public Account(long id, String number, BigDecimal balance) {
         this.id = id;
         this.number = number;
         this.balance = balance;
@@ -40,8 +39,6 @@ public class Account implements AccountRepo {
 
     @Override
     public List<Card> getCards() {
-        DBConnector connector = new DBConnector();
-        connector.createConnection();
         cards = new ArrayList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM CARD WHERE ACCOUNT_ID = ?");
@@ -55,8 +52,40 @@ public class Account implements AccountRepo {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        connector.closeConnection();
         return cards;
+    }
+
+    public static Account getAccount(String num) {
+        Account account = null;
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE NUMBER = ?");
+            statement.setString(1, num);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int accId = rs.getInt("ID");
+                String accNumber = rs.getString("NUMBER");
+                BigDecimal balance = rs.getBigDecimal("BALANCE");
+                account = new Account(accId, num, balance);
+            }
+            return account;
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return getNumber().equals(account.getNumber()) && getBalance().equals(account.getBalance());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNumber(), getBalance());
     }
 
     @Override

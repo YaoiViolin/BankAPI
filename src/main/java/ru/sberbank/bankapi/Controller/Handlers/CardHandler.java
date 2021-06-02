@@ -17,7 +17,7 @@ public class CardHandler implements HttpHandler {
         String URI = exchange.getRequestURI().toString();
         long cardId = getIdFromUri(URI);
         ServiceImpl service = new ServiceImpl();
-        String response = null;
+        String response;
 
         if (exchange.getRequestMethod().equals("GET")) {
             response = service.getBalance(cardId);

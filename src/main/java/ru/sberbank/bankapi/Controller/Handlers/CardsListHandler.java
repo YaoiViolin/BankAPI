@@ -14,19 +14,17 @@ public class CardsListHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         ServiceImpl service = new ServiceImpl();
-        String response = null;
+        String response;
         if (exchange.getRequestMethod().equals("POST")) {
-            System.out.println("This is POST");
             String json= new BufferedReader(
                     new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
                     .lines()
                     .collect(Collectors.joining("\n"));
-
             response = service.createNewCard(json);
+
 
         }
         else {
-            System.out.println("This is get");
             String login = getLoginFromUri(exchange.getRequestURI().toString());
             response = service.getAllCards(login.toUpperCase(Locale.ROOT));
         }
@@ -35,8 +33,6 @@ public class CardsListHandler implements HttpHandler {
             os.write(response.getBytes());
             os.flush();
             os.close();
-            System.out.println(exchange.getAttribute("login").toString());
-
     }
 
     private String getLoginFromUri(String uri) {

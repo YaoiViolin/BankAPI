@@ -18,7 +18,7 @@ public class ServiceImpl implements Service{
         BigDecimal sum = new BigDecimal(covertJsonToMap(jsonSumString).get("sum"));
         Card card = Card.getCard(cardId);
         BigDecimal prev = card.getBalance();
-        card.updateCardBalance(prev.add(sum));
+        card.setCardBalance(prev.add(sum));
         return card.getBalance().toString();
     }
 
@@ -45,8 +45,9 @@ public class ServiceImpl implements Service{
         Long number = Long.parseLong(lastCardNumber);
         number ++;
         String currentNum = String.format("%016d", number);
+        System.out.println(currentNum);
         Card card = new Card(0, currentNum);
-        long accountId = Long.parseLong(covertJsonToMap(accountIdString).get("info"));
+        long accountId = Long.parseLong(covertJsonToMap(accountIdString).get("id"));
         Card.addCard(card, accountId);
         return convertSingleCardToJson(getCard(currentNum));
     }

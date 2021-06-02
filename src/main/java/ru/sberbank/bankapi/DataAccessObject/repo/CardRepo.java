@@ -11,7 +11,7 @@ import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
 
 public interface CardRepo {
 
-    int updateCardBalance(BigDecimal sum);
+    int setCardBalance(BigDecimal sum);
 
 
 }

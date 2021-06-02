@@ -1,6 +1,7 @@
 package ru.sberbank.bankapi.Controller;
 
 import com.sun.net.httpserver.HttpServer;
+import ru.sberbank.bankapi.Controller.Handlers.ExitHandler;
 import ru.sberbank.bankapi.Controller.Handlers.RootHandler;
 
 import java.io.IOException;
@@ -10,21 +11,25 @@ import java.net.InetSocketAddress;
 public class Server {
     public static HttpServer server;
 
-    public int startServer() throws IOException {
-    int serverPort = 8000;
+    public static int startServer() throws IOException {
+    int serverPort = 8080;
         server = HttpServer.create(new InetSocketAddress(serverPort), 0);
         RootHandler rootHandler = new RootHandler();
+        ExitHandler exitHandler = new ExitHandler();
 
+        server.createContext("/exit", exitHandler);
         server.createContext("/clients/", rootHandler);
-        //server.createContext("/clients/cards/", cardHandler::handle);
-        //server.createContext("/clients/balance/", cardHandler::handle);
-        //server.createContext("/clients/balance", cardHandler::handle);
-
-
         server.setExecutor(null);
-        // creates a default executor
-        System.out.println("Server started");
         server.start();
+        System.out.println("Server started");
         return 1;
+    }
+
+    public static void stopServer() {
+        try {
+            server.stop(0);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
