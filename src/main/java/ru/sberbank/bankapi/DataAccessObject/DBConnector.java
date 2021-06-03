@@ -37,10 +37,10 @@ public class DBConnector {
     public static int dbInit() {
         try {
             Statement statement = con.createStatement();
-            statement.executeUpdate("DROP TABLE IF EXISTS CARD, ACCOUNT, CLIENT");
+            statement.executeUpdate("DROP TABLE IF EXISTS CARD, ACCOUNT, CLIENT, COUNTERPARTY");
 
             statement.executeUpdate("create table if not exists CLIENT" +
-                    "(ID INT auto_increment " +
+                    "(ID BIGINT auto_increment " +
                     "primary key," +
                     "LOGIN VARCHAR(15) not null);" +
                     "create unique index if not exists CLIENT_LOGIN_UINDEX " +
@@ -49,7 +49,7 @@ public class DBConnector {
             statement.executeUpdate("create table if not exists ACCOUNT" +
                     "(ID BIGINT auto_increment," +
                     "NUMBER VARCHAR(25)," +
-                    "BALANCE DECIMAL not null," +
+                    "BALANCE DECIMAL(15,2) not null," +
                     "CLIENT_ID BIGINT not null " +
                     "references CLIENT (ID)," +
                     "constraint ACCOUNT_PK " +
@@ -70,12 +70,19 @@ public class DBConnector {
                     "create unique index if not exists CARD_NUMBER_UINDEX " +
                     "on CARD (NUMBER);");
 
+            statement.executeUpdate("create table if not exists COUNTERPARTY " +
+                    "(TRNS_ID IDENTITY, " +
+                    "CARD_FROM VARCHAR(16) not null, " +
+                    "CARD_TO VARCHAR(16) not null, " +
+                    "SUM DECIMAL, " +
+                    "constraint COUNTERPARTY_PK " +
+                    "primary key (TRNS_ID));");
 
             statement.executeUpdate("INSERT INTO CLIENT (LOGIN) VALUES ( 'RITA'); " +
                     "INSERT INTO CLIENT (LOGIN) VALUES ( 'JOHN');" +
                     "INSERT INTO CLIENT (LOGIN) VALUES ( 'VASYA')");
 
-            statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '8888', 12.5, 1 ); " +
+            statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '8888', 120.5, 1 ); " +
                     "INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ('9999', 340.6, 2)");
 
             statement.executeUpdate("INSERT INTO CARD(NUMBER, ACCOUNT_ID) VALUES ( '0000000000000000', 1 );" +

@@ -6,6 +6,7 @@ import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +54,17 @@ public class Account implements AccountRepo {
             throwables.printStackTrace();
         }
         return cards;
+    }
+
+    public static boolean ifExists(long id){
+        try (PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE ID = ?")) {
+            statement.setLong(1, id);
+            rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
     }
 
     public static Account getAccount(String num) {

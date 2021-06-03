@@ -17,28 +17,24 @@ class CardTest {
 
     @BeforeAll
     public static void beforeAll() throws SQLException {
-        dbInit();
         createConnection();
+        dbInit();
         Statement statement = con.createStatement();
-        statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '0000', 100.1, 3 );");
+        statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '0000', 100.10, 3 );");
         statement.executeUpdate("INSERT INTO CARD (NUMBER, ACCOUNT_ID) VALUES ( '1000000000000000'," +
                 "(SELECT ID FROM ACCOUNT WHERE ACCOUNT.NUMBER = '0000'));");
-        closeConnection();
     }
 
-    /*@AfterAll
+    @AfterAll
     public static void afterAll() throws SQLException {
-        createConnection();
-        Statement statement = con.createStatement();
-        statement.executeUpdate("DROP TABLE CARD; DROP TABLE ACCOUNT; DROP TABLE CLIENT;");
         closeConnection();
-    }*/
+    }
 
     @Test
     void getBalance() {
         Card card = new Card(1, "1000000000000000");
         BigDecimal balanceActual = card.getBalance();
-        BigDecimal balanceExpected = new BigDecimal(100.1).setScale(1, RoundingMode.HALF_UP);
+        BigDecimal balanceExpected = new BigDecimal(100.1).setScale(2, RoundingMode.HALF_UP);
 
         Assertions.assertEquals(balanceExpected, balanceActual);
 
@@ -50,7 +46,7 @@ class CardTest {
 
         card.setCardBalance(new BigDecimal("50.1"));
         BigDecimal balanceActual = card.getBalance();
-        BigDecimal balanceExpected = new BigDecimal("50.1").setScale(1, RoundingMode.HALF_UP);
+        BigDecimal balanceExpected = new BigDecimal("50.10").setScale(2, RoundingMode.HALF_UP);
 
         Assertions.assertEquals(balanceExpected, balanceActual);
     }

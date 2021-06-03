@@ -13,30 +13,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
 class ClientTest {
 
     @BeforeAll
     public static void beforeAll() throws SQLException {
-        dbInit();
         createConnection();
+        dbInit();
         Statement statement = con.createStatement();
         statement.executeUpdate( "INSERT INTO CLIENT (ID, LOGIN) VALUES (4, 'RICHARD' );");
 
         statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '0000', 100.1, 4);");
-
-        closeConnection();
     }
 
-    /*@AfterAll
+    @AfterAll
     public static void afterAll() throws SQLException {
-        createConnection();
-        Statement statement = con.createStatement();
-        statement.executeUpdate("DROP TABLE CARD; DROP TABLE ACCOUNT; DROP TABLE CLIENT;");
         closeConnection();
-    }*/
+    }
 
     @Test
     void getClient() {
@@ -52,7 +46,7 @@ class ClientTest {
         Client client = new Client(4, "RICHARD");
         List<Account> actual = client.getAccounts();
         List<Account> expected = new ArrayList<>();
-        expected.add(new Account(1, "0000", new BigDecimal("100.1")));
+        expected.add(new Account(1, "0000", new BigDecimal("100.10")));
 
         Assertions.assertEquals(expected, actual);
     }

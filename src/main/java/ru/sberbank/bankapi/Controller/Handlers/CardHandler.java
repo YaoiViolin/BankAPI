@@ -2,7 +2,7 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sberbank.bankapi.Service.ServiceImpl;
+import ru.sberbank.bankapi.Service.UserServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,28 +16,29 @@ public class CardHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String URI = exchange.getRequestURI().toString();
         long cardId = getIdFromUri(URI);
-        ServiceImpl service = new ServiceImpl();
+        int responseCode;
+        UserServiceImpl service = new UserServiceImpl();
         String response;
 
         if (exchange.getRequestMethod().equals("GET")) {
-            response = service.getBalance(cardId);
+            String data = service.getBalance(cardId);
+            response = data == null ? "No such card found" : data;
         }
         else {
             String json= new BufferedReader(
                     new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))
                     .lines()
                     .collect(Collectors.joining("\n"));
-
-            response = service.addMoneyToCard(json, cardId);
-            System.out.println(response);
+            String data = service.addMoneyToCard(json, cardId, true);
+            response = data == null ? "No such card found" : data;
         }
-            exchange.sendResponseHeaders(200, response.length());
+        responseCode = response.equals("No such card found") ? 404 : 200;
+
+            exchange.sendResponseHeaders(responseCode, response.length());
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.flush();
             os.close();
-            System.out.println(exchange.getAttribute("login").toString());
-
     }
 
     private static long getIdFromUri(String uri) {

@@ -1,0 +1,42 @@
+POST http://localhost:8080/counterparty/
+Content-Type: application/json
+
+{"cardNumberFrom" : "0000000000000000", "cardNumberTo" : "0000000000000002", "sum" : 5.35}
+
+###Запрос на перевод с карты на карту с добавлением в таблицу
+
+
+GET http://localhost:8080/counterparty/
+Accept: application/json
+
+### Список всех переводов между картами контрагентов
+
+
+POST http://localhost:8080/clients/rita/cards/1
+Content-Type: application/json
+
+{"sum" : 39.50}
+
+### Пополнить баланс существующей карты на sum
+
+GET http://localhost:8080/clients/rita/cards/1
+Accept: application/json
+
+### Узнать баланс  существующей карты.
+
+POST http://localhost:8080/clients/rita/cards/
+Content-Type: application/json
+
+{"id" : 1}
+
+### Запрос на выпуск новой карты по счёту.
+
+GET http://localhost:8080/clients/rita/cards/
+Accept: application/json
+
+### Запрос списка всех карт клиента.
+
+
+
+
+

@@ -16,11 +16,12 @@ import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.sberbank.bankapi.Controller.Server.startServer;
+import static ru.sberbank.bankapi.Controller.Server.stopServer;
 
 class ServerTest {
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws IOException {
         DBConnector.createConnection();
         DBConnector.dbInit();
     }
@@ -28,10 +29,11 @@ class ServerTest {
     @AfterAll
     static void afterAll() {
         DBConnector.closeConnection();
+        stopServer();
     }
 
     @Test
-    void getCardsListTest() throws URISyntaxException, IOException, InterruptedException {
+    void getCardsListTest() throws IOException, InterruptedException {
         startServer();
 
         HttpClient client = HttpClient.newHttpClient();
@@ -43,10 +45,11 @@ class ServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         boolean match = Pattern.matches("\\{\"id\":\\d+,\"number\":\"\\d{16}\"}.+", response.body());
         assertTrue(match);
+
         Server.stopServer();
     }
     @Test
-    void getBalanceTest() throws URISyntaxException, IOException, InterruptedException {
+    void getBalanceTest() throws IOException, InterruptedException {
         startServer();
         HttpClient client = HttpClient.newHttpClient();
 
@@ -76,12 +79,13 @@ class ServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         boolean match = Pattern.matches("\\{\"id\":\\d+,\"number\":\"\\d{16}\"}", response.body());
         assertTrue(match);
-        Server.stopServer();
+       Server.stopServer();
     }
 
     @Test
     void setBalanceTest() throws URISyntaxException, IOException, InterruptedException {
         startServer();
+
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -91,8 +95,9 @@ class ServerTest {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        boolean match = Pattern.matches("\\d.+", response.body());
+        boolean match = Pattern.matches("\\{\"balance\":\\d.+}", response.body());
         assertTrue(match);
+
         Server.stopServer();
     }
 

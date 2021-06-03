@@ -117,7 +117,7 @@ public class Card implements CardRepo {
             statement.setString(1, number);
             rs = statement.executeQuery();
             while (rs.next()) {
-                long id = rs.getLong("NUMBER");
+                long id = rs.getLong("ID");
                 card = new Card(id, number);
             }
             return card;
@@ -128,6 +128,7 @@ public class Card implements CardRepo {
         }
 
     }
+
 
     @Override
     public boolean equals(Object o) {

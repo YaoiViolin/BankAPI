@@ -61,3 +61,6 @@
                           "INSERT INTO CARD(NUMBER, ACCOUNT_ID) VALUES ( '0000000000000003', 2 )");
 
                   statement.executeQuery("SELECT * FROM CARD");
+
+
+                  {"cardNumberFrom":"0000000000000000","cardNumberTo":"0000000000000001","sum":12.5}

@@ -11,13 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ObjectToJsonConverterTest {
 
     @Test
     void convertListToJsonString() {
-        List<Card> cards = new ArrayList<>();
+        List<Object> cards = new ArrayList<>();
         cards.add(new Card(1, "0000"));
         cards.add(new Card(2, "0001"));
 
@@ -43,8 +41,6 @@ class ObjectToJsonConverterTest {
         Map<String, String> expected = Collections.singletonMap("id", "1");
 
         Assertions.assertEquals(expected, actual);
-
-
     }
 
     @Test

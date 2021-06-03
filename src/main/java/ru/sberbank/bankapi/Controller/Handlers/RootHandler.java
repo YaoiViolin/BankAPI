@@ -10,8 +10,6 @@ public class RootHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String URI = exchange.getRequestURI().toString();
-        System.out.println(URI);
-
 
         if (Pattern.matches("/clients/\\D+/cards/$", URI)) {
             CardsListHandler cardsListHandler = new CardsListHandler();

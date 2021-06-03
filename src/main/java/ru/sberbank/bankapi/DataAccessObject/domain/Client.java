@@ -14,15 +14,15 @@ import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
 @JsonAutoDetect
 public class Client implements ClientRepo {
-    private final int id;
+    private final long id;
     private final String login;
 
-    public Client(int id, String login) {
+    public Client(long id, String login) {
         this.id = id;
         this.login = login;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class Client implements ClientRepo {
         List<Account> accounts = new ArrayList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE CLIENT_ID = ?");
-            statement.setInt(1, this.id);
+            statement.setLong(1, this.id);
             rs = statement.executeQuery();
             while (rs.next()) {
                 int accountId = rs.getInt("ID");
@@ -62,6 +62,7 @@ public class Client implements ClientRepo {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return null;
         }
         return accounts;
     }
