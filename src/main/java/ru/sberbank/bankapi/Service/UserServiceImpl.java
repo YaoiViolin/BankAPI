@@ -3,15 +3,18 @@ package ru.sberbank.bankapi.Service;
 import ru.sberbank.bankapi.DataAccessObject.domain.Account;
 import ru.sberbank.bankapi.DataAccessObject.domain.Card;
 import ru.sberbank.bankapi.DataAccessObject.domain.Client;
+import ru.sberbank.bankapi.Service.InterFaces.UserService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static ru.sberbank.bankapi.DataAccessObject.domain.Card.*;
-import static ru.sberbank.bankapi.DataAccessObject.domain.Client.*;
-import static ru.sberbank.bankapi.Service.ObjectToJsonConverter.*;
+import static ru.sberbank.bankapi.DataAccessObject.domain.Card.getCard;
+import static ru.sberbank.bankapi.DataAccessObject.domain.Card.getLastCardNumber;
+import static ru.sberbank.bankapi.DataAccessObject.domain.Client.getClient;
+import static ru.sberbank.bankapi.Service.ServiceImpl.ObjectToJsonConverter.*;
 
 public class UserServiceImpl implements UserService {
 

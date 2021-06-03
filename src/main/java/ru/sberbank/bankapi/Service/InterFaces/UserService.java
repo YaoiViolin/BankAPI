@@ -1,6 +1,5 @@
-package ru.sberbank.bankapi.Service;
+package ru.sberbank.bankapi.Service.InterFaces;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public interface UserService {

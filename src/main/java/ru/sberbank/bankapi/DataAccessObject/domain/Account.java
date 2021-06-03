@@ -6,12 +6,12 @@ import ru.sberbank.bankapi.DataAccessObject.repo.AccountRepo;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.con;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
 
 @JsonAutoDetect
 public class Account implements AccountRepo {

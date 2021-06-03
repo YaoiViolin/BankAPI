@@ -21,7 +21,7 @@ import static ru.sberbank.bankapi.Controller.Server.stopServer;
 class ServerTest {
 
     @BeforeAll
-    static void beforeAll() throws IOException {
+    static void beforeAll() {
         DBConnector.createConnection();
         DBConnector.dbInit();
     }
@@ -97,6 +97,35 @@ class ServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         boolean match = Pattern.matches("\\{\"balance\":\\d.+}", response.body());
         assertTrue(match);
+
+        Server.stopServer();
+    }
+
+    @Test
+    void makeTransactionAndGetList() throws URISyntaxException, IOException, InterruptedException {
+        startServer();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/counterparty/"))
+                .headers("Content-Type", "text/plain;charset=UTF-8")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"cardNumberFrom\" : \"0000000000000000\", \"cardNumberTo\" : \"0000000000000002\", \"sum\" : 5.35}"))
+                .build();
+
+        HttpResponse<String> responseFirst = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        boolean match = Pattern.matches("\\{\"balance\":.+}\\{\"balance\":.+}", responseFirst.body());
+        assertTrue(match);
+
+        HttpRequest requestGet = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost:8080/counterparty/"))
+                .GET()
+                .build();
+
+        HttpResponse<String> responseSecond = client.send(requestGet, HttpResponse.BodyHandlers.ofString());
+        boolean matchList = Pattern.matches("\\{\"cardNumberFrom\":\"\\d{16}\",\"cardNumberTo\":\"\\d{16}\",\"sum\":.+}", responseSecond.body());
+        assertTrue(matchList);
 
         Server.stopServer();
     }

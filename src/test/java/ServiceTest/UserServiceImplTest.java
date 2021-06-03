@@ -1,9 +1,10 @@
 package ServiceTest;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.sberbank.bankapi.Service.UserService;
+import ru.sberbank.bankapi.Service.InterFaces.UserService;
 import ru.sberbank.bankapi.Service.UserServiceImpl;
 
 import java.sql.SQLException;
@@ -22,6 +23,11 @@ class UserServiceImplTest {
         statement.executeUpdate( "INSERT INTO CLIENT (ID, LOGIN) VALUES (10, 'RICHARD' ), (11, 'SONYA'), (12, 'ALBERT');");
         statement.executeUpdate("INSERT INTO ACCOUNT (ID,NUMBER, BALANCE, CLIENT_ID) VALUES ( 10,'0000', 100, 10), ( 11,'0001', 200, 11);");
         statement.executeUpdate("INSERT INTO CARD (ID,NUMBER, ACCOUNT_ID) VALUES ( 10,'0000111100001111', 10), ( 11,'1111111100001111', 11);");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        closeConnection();
     }
 
     @Test

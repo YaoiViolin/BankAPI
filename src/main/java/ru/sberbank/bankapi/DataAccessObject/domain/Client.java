@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.con;
+import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
 
 @JsonAutoDetect
 public class Client implements ClientRepo {

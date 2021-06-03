@@ -2,14 +2,10 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.eclipse.jetty.http.HttpParser;
-import ru.sberbank.bankapi.Controller.Server;
 import ru.sberbank.bankapi.DataAccessObject.DBConnector;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
-import static ru.sberbank.bankapi.Controller.Server.stopServer;
 
 public class ExitHandler implements HttpHandler {
     @Override

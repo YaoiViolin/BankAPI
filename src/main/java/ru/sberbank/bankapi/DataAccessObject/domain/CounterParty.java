@@ -1,8 +1,6 @@
 package ru.sberbank.bankapi.DataAccessObject.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.beans.ConstructorProperties;
@@ -12,9 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
-import static ru.sberbank.bankapi.DataAccessObject.DBConnector.rs;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CounterParty {
@@ -75,5 +73,18 @@ public class CounterParty {
             throwables.printStackTrace();
         }
         return cpList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CounterParty that = (CounterParty) o;
+        return getCardNumberFrom().equals(that.getCardNumberFrom()) && getCardNumberTo().equals(that.getCardNumberTo()) && getSum().equals(that.getSum());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCardNumberFrom(), getCardNumberTo(), getSum());
     }
 }

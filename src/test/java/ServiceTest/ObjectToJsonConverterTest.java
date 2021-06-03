@@ -3,7 +3,7 @@ package ServiceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.sberbank.bankapi.DataAccessObject.domain.Card;
-import ru.sberbank.bankapi.Service.ObjectToJsonConverter;
+import ru.sberbank.bankapi.Service.ServiceImpl.ObjectToJsonConverter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

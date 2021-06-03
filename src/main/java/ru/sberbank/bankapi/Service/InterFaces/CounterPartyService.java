@@ -1,4 +1,4 @@
-package ru.sberbank.bankapi.Service;
+package ru.sberbank.bankapi.Service.InterFaces;
 
 public interface CounterPartyService {
     String getTransactionsList();

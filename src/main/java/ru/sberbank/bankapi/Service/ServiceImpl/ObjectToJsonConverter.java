@@ -1,4 +1,4 @@
-package ru.sberbank.bankapi.Service;
+package ru.sberbank.bankapi.Service.ServiceImpl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ObjectToJsonConverter {
     public static String convertListToJsonString(List<Object> list) {

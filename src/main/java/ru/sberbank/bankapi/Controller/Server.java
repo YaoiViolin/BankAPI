@@ -1,9 +1,9 @@
 package ru.sberbank.bankapi.Controller;
 
 import com.sun.net.httpserver.HttpServer;
+import ru.sberbank.bankapi.Controller.Handlers.CounterPartyHandler;
 import ru.sberbank.bankapi.Controller.Handlers.ExitHandler;
 import ru.sberbank.bankapi.Controller.Handlers.RootHandler;
-import ru.sberbank.bankapi.Controller.Handlers.CounterPartyHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,7 +24,6 @@ public class Server {
         server.createContext("/counterparty/", counterPartyHandler);
         server.setExecutor(null);
         server.start();
-        System.out.println("Server started");
         return 1;
     }
 

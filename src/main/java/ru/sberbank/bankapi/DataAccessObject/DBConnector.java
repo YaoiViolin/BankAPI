@@ -90,9 +90,6 @@ public class DBConnector {
                     "INSERT INTO CARD(NUMBER, ACCOUNT_ID) VALUES ( '0000000000000002', 2 ); " +
                     "INSERT INTO CARD(NUMBER, ACCOUNT_ID) VALUES ( '0000000000000003', 2 )");
 
-            statement.executeQuery("SELECT * FROM CARD");
-
-
             return 1;
         } catch (SQLException throwables) {
             throwables.printStackTrace();

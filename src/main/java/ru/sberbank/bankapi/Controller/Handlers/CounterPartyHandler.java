@@ -2,9 +2,8 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sberbank.bankapi.Service.CounterPartyService;
-import ru.sberbank.bankapi.Service.CounterPartyServiceImpl;
-import ru.sberbank.bankapi.Service.UserServiceImpl;
+import ru.sberbank.bankapi.Service.InterFaces.CounterPartyService;
+import ru.sberbank.bankapi.Service.ServiceImpl.CounterPartyServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +21,11 @@ public class CounterPartyHandler implements HttpHandler {
         int responseCode = 200;
 
         if (exchange.getRequestMethod().equals("GET")) {
-            response = service.getTransactionsList();
+            String data = service.getTransactionsList();
+            if (data == null) {
+                response = "No transactions were made";
+                responseCode = 404;
+            } else response = data;
         }
         else {
             String json= new BufferedReader(
