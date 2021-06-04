@@ -1,9 +1,13 @@
 package ru.sberbank.bankapi.DataAccessObject;
 
+import java.io.BufferedReader;
 import java.sql.*;
 
+/**
+ * Класс обеспечиваюзий взаимодействие с БД
+ */
 public class DBConnector {
-    //public static final String DB_URL = "jdbc:h2:/Users/u19223229/IdeaProjects/BankAPI/src/main/java/ru/sberbank/bankapi/db/Bank";
+
     public static final String DB_URL = "jdbc:h2:mem:Bank";
     public static final String USER = "user";
     public static final String PASSWORD = "password";
@@ -12,6 +16,10 @@ public class DBConnector {
     public static Connection con;
     public static ResultSet rs;
 
+    /**
+     * выполняется подключение к БД, хранящейся в памяти
+     * @return 1 в случае успешного подключения к БД, 0 в случае ошибки
+     */
     public static int createConnection() {
         try {
             Class.forName(DB_Driver);
@@ -24,6 +32,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * закрывает подключение к БД
+     * @return 1 в случае успешного завершения работы с БД, 0 в случае ошибки
+     */
     public static int closeConnection() {
         try {
             con.close();
@@ -34,7 +46,11 @@ public class DBConnector {
         }
     }
 
-    public static int dbInit() {
+    /**
+     * создает таблицы (схему) БД
+     * @return 1 в случае успешного создания таблиц БД, 0 в случае ошибки
+     */
+    public static int dbCreate() {
         try {
             Statement statement = con.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS CARD, ACCOUNT, CLIENT, COUNTERPARTY");
@@ -78,6 +94,20 @@ public class DBConnector {
                     "constraint COUNTERPARTY_PK " +
                     "primary key (TRNS_ID));");
 
+            return 1;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * заполняет БД данными
+     * @return 1 в случае успешного заполнения БД, 0 в случае ошибки
+     */
+    public static int dbInit() {
+        try {
+            Statement statement = con.createStatement();
             statement.executeUpdate("INSERT INTO CLIENT (LOGIN) VALUES ( 'RITA'); " +
                     "INSERT INTO CLIENT (LOGIN) VALUES ( 'JOHN');" +
                     "INSERT INTO CLIENT (LOGIN) VALUES ( 'VASYA')");
@@ -96,4 +126,11 @@ public class DBConnector {
             return 0;
         }
     }
+
+    public static int dbInit(int intValue) {
+        BufferedReader reader;
+        return 0;
+    }
+
+
 }

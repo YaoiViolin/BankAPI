@@ -20,7 +20,7 @@ class ClientTest {
     @BeforeAll
     public static void beforeAll() throws SQLException {
         createConnection();
-        dbInit();
+        dbCreate();
         Statement statement = con.createStatement();
         statement.executeUpdate( "INSERT INTO CLIENT (ID, LOGIN) VALUES (4, 'RICHARD' );");
 

@@ -31,10 +31,13 @@ class DBConnectorTest {
     }
 
     @Test
-    void dbInit() {
+    void dbCreateAndInit() {
         DBConnector.createConnection();
-        int actual = DBConnector.dbInit();
+        int actualCreate = DBConnector.dbCreate();
+        int actualInit = DBConnector.dbInit();
         int expected = 1;
-        Assertions.assertEquals(expected, actual);
+
+        Assertions.assertEquals(expected, actualCreate);
+        Assertions.assertEquals(expected, actualInit);
     }
 }

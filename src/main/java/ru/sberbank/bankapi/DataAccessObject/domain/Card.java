@@ -12,16 +12,25 @@ import java.util.Objects;
 
 import static ru.sberbank.bankapi.DataAccessObject.DBConnector.*;
 
+
 @JsonAutoDetect
 public class Card implements CardRepo {
     private final long id;
     private final String number;
 
+    /**
+     * Констуктор класса "карта клиента"
+     * @param id уникальный идентификатор
+     * @param number уникальный 16-значный номер
+     */
     public Card(long id, String number) {
         this.id = id;
         this.number = number;
     }
 
+    /**
+     * Геттеры и сеттеры
+     */
     public long getId() {
         return id;
     }
@@ -30,6 +39,10 @@ public class Card implements CardRepo {
         return number;
     }
 
+    /**
+     * Возвращает баланс на счёте, к которому привязана карта
+     * @return баланс в рублях
+     */
     @JsonIgnore
     public BigDecimal getBalance() {
         try {
@@ -48,6 +61,11 @@ public class Card implements CardRepo {
         }
     }
 
+    /**
+     * Устанавливает баланс счёта, к которому привязана эта карта
+     * @param sum значение баланса, которое должно быть установлено
+     * @return 1 в случае успеха, 0 в случае ошибки
+     */
     @Override
     public int setCardBalance(BigDecimal sum) {
         try {
@@ -62,6 +80,10 @@ public class Card implements CardRepo {
         }
     }
 
+    /**
+     * Отвечает за уникальность номеров карт
+     * @return последний номер карты из базы
+     */
     public static String getLastCardNumber() {
         try {
             String number = null;
@@ -77,6 +99,12 @@ public class Card implements CardRepo {
         }
     }
 
+    /**
+     * Добавляет карту в базу
+     * @param card карта, который нужно добавить в базу
+     * @param account_id номер счёта, к которому нужно привязать карту
+     * @return 1 в случае успешного добавления, 0 в случае ошибки
+     */
     public static int addCard(Card card, long account_id) {
         try {
             PreparedStatement statement = con.prepareStatement("INSERT INTO CARD (NUMBER, ACCOUNT_ID) VALUES ( ?, ?)");
@@ -91,6 +119,11 @@ public class Card implements CardRepo {
         }
     }
 
+    /**
+     * Достает из базы карту по id
+     * @param id карты, которую треубется достать из базы
+     * @return экзамепляр класса карты
+     */
     public static Card getCard(Long id) {
         try {
             Card card = null;
@@ -109,7 +142,11 @@ public class Card implements CardRepo {
         }
 
     }
-
+    /**
+     * Достает из базы карту по номеру
+     * @param number карты, которую треубется достать из базы
+     * @return экзамепляр класса карты
+     */
     public static Card getCard(String number) {
         try {
             Card card = null;
@@ -129,7 +166,9 @@ public class Card implements CardRepo {
 
     }
 
-
+    /**
+     * Переопределение методов по умолчанию
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

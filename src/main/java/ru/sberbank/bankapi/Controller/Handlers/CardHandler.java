@@ -2,7 +2,7 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sberbank.bankapi.Service.UserServiceImpl;
+import ru.sberbank.bankapi.Service.ServiceImpl.UserServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,11 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+/**
+ * Обработчик, отвечающий за работу с конкретной картой клиента
+ * Сюда приходят GET запросы на получение баланса карты/счета
+ * и POST запросы на пополение баланса карты/счета
+ */
 public class CardHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

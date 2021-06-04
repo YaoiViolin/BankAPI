@@ -3,7 +3,7 @@ package ServiceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.sberbank.bankapi.DataAccessObject.domain.Card;
-import ru.sberbank.bankapi.Service.ServiceImpl.ObjectToJsonConverter;
+import ru.sberbank.bankapi.Service.ObjectToJsonConverter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ class ObjectToJsonConverterTest {
         cards.add(new Card(2, "0001"));
 
         String actual = ObjectToJsonConverter.convertListToJsonString(cards);
-        String expected = "{\"id\":1,\"number\":\"0000\"}{\"id\":2,\"number\":\"0001\"}";
+        String expected = "[{\"id\":1,\"number\":\"0000\"},{\"id\":2,\"number\":\"0001\"}]";
 
         Assertions.assertEquals(expected, actual);
     }

@@ -23,6 +23,7 @@ class ServerTest {
     @BeforeAll
     static void beforeAll() {
         DBConnector.createConnection();
+        DBConnector.dbCreate();
         DBConnector.dbInit();
     }
 
@@ -43,7 +44,7 @@ class ServerTest {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        boolean match = Pattern.matches("\\{\"id\":\\d+,\"number\":\"\\d{16}\"}.+", response.body());
+        boolean match = Pattern.matches(".\\{\"id\":\\d+,\"number\":\"\\d{16}\"}.+", response.body());
         assertTrue(match);
 
         Server.stopServer();
@@ -114,8 +115,7 @@ class ServerTest {
                 .build();
 
         HttpResponse<String> responseFirst = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        boolean match = Pattern.matches("\\{\"balance\":.+}\\{\"balance\":.+}", responseFirst.body());
+        boolean match = Pattern.matches(".\\{\"balance\":.+},\\{\"balance\":.+}.", responseFirst.body());
         assertTrue(match);
 
         HttpRequest requestGet = HttpRequest.newBuilder()
@@ -124,7 +124,7 @@ class ServerTest {
                 .build();
 
         HttpResponse<String> responseSecond = client.send(requestGet, HttpResponse.BodyHandlers.ofString());
-        boolean matchList = Pattern.matches("\\{\"cardNumberFrom\":\"\\d{16}\",\"cardNumberTo\":\"\\d{16}\",\"sum\":.+}", responseSecond.body());
+        boolean matchList = Pattern.matches(".\\{\"cardNumberFrom\":\"\\d{16}\",\"cardNumberTo\":\"\\d{16}\",\"sum\":.+}.", responseSecond.body());
         assertTrue(matchList);
 
         Server.stopServer();

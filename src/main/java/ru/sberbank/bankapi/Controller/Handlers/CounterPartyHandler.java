@@ -2,7 +2,7 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sberbank.bankapi.Service.InterFaces.CounterPartyService;
+import ru.sberbank.bankapi.Service.Interfaces.CounterPartyService;
 import ru.sberbank.bankapi.Service.ServiceImpl.CounterPartyServiceImpl;
 
 import java.io.BufferedReader;
@@ -12,6 +12,11 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+/**
+ * Обработчик взаимодействия контрагентов
+ * Сюда приходят GET запросы на получение информации о взаимодействии контрагентов
+ * и POST запромсы на добавление инф-и о контрагентах
+ */
 public class CounterPartyHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

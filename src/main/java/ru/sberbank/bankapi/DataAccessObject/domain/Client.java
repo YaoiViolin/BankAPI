@@ -18,11 +18,19 @@ public class Client implements ClientRepo {
     private final long id;
     private final String login;
 
+    /**
+     * Конструктор класса "клиент"
+     * @param id уникальный идентификатор
+     * @param login уникальный логин
+     */
     public Client(long id, String login) {
         this.id = id;
         this.login = login;
     }
 
+    /**
+     * Геттеры
+     */
     public long getId() {
         return id;
     }
@@ -31,6 +39,11 @@ public class Client implements ClientRepo {
         return login;
     }
 
+    /**
+     * Возвращает экзмепляр класса по логину
+     * @param login уникальный логин
+     * @return экземпляр класса
+     */
     public static Client getClient(String login) {
         try {
             Client client = null;
@@ -48,6 +61,9 @@ public class Client implements ClientRepo {
         }
     }
 
+    /**
+     * @return список счетов клиента
+     */
     @Override
     public List<Account> getAccounts() {
         List<Account> accounts = new ArrayList<>();
@@ -67,7 +83,9 @@ public class Client implements ClientRepo {
         }
         return accounts;
     }
-
+    /**
+        Переопределение методов по умолчанию
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

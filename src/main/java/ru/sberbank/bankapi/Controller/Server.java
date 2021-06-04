@@ -8,10 +8,16 @@ import ru.sberbank.bankapi.Controller.Handlers.RootHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-
+/**
+ * Класс отвечающий за создание сервера
+ */
 public class Server {
     public static HttpServer server;
 
+    /**
+     * Запускает сервер
+     * @return 1 в случае успеха
+     */
     public static int startServer() throws IOException {
     int serverPort = 8080;
         server = HttpServer.create(new InetSocketAddress(serverPort), 0);
@@ -27,6 +33,9 @@ public class Server {
         return 1;
     }
 
+    /**
+     * Завершает работу сервера
+     */
     public static void stopServer() {
         try {
             server.stop(0);

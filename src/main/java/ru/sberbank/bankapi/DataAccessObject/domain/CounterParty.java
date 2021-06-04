@@ -25,6 +25,12 @@ public class CounterParty {
     @JsonProperty("sum")
     private final BigDecimal sum;
 
+    /**
+     * Конструктор клсса работы с контагентами
+     * @param cardNumberFrom номер карты с которой осуществляется перевод
+     * @param cardNumberTo номер карты на которую осуществляется перевод
+     * @param sum сумма перевода в рублях
+     */
     @ConstructorProperties({"cardNumberFrom", "cardNumberTo", "sum"})
     public CounterParty(String cardNumberFrom, String cardNumberTo, BigDecimal sum) {
         this.cardNumberFrom = cardNumberFrom;
@@ -32,6 +38,9 @@ public class CounterParty {
         this.sum = sum;
     }
 
+    /**
+     * Геттеры
+     */
     public String getCardNumberFrom() {
         return cardNumberFrom;
     }
@@ -44,6 +53,11 @@ public class CounterParty {
         return sum;
     }
 
+    /**
+     * Записывает в БД информацию о переводе с карты на карту
+     * @param counterParty экземпляр перевода
+     * @return 1 в случае успеха, 0 в случае ошибки
+     */
     public static int createTransaction(CounterParty counterParty) {
         try {
             PreparedStatement statement = con.prepareStatement("INSERT INTO COUNTERPARTY (CARD_FROM, CARD_TO, SUM) VALUES ( ?, ?, ?)");
@@ -58,6 +72,10 @@ public class CounterParty {
             return 0;
         }
     }
+
+    /**
+     * @return возвращает информацию обо всех переводах между контрагентами
+     */
     public static List<CounterParty> getAll() {
         List<CounterParty> cpList = new ArrayList<>();
         try {
@@ -75,6 +93,9 @@ public class CounterParty {
         return cpList;
     }
 
+    /**
+     * Переопределение методов по умолчанию
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

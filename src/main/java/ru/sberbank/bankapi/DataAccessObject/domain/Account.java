@@ -20,12 +20,21 @@ public class Account implements AccountRepo {
     private final BigDecimal balance;
     private List<Card> cards;
 
+    /**
+     * Констуктор объекта "счет клиента
+     * @param id уникальный идектификатор
+     * @param number уникальный номер счёта
+     * @param balance баланс в рублях
+     */
     public Account(long id, String number, BigDecimal balance) {
         this.id = id;
         this.number = number;
         this.balance = balance;
     }
 
+    /**
+     * Геттеры
+     */
     public long getId() {
         return id;
     }
@@ -38,6 +47,9 @@ public class Account implements AccountRepo {
         return balance;
     }
 
+    /**
+     * @return список карт, прикрепелнных к этому счёту
+     */
     @Override
     public List<Card> getCards() {
         cards = new ArrayList<>();
@@ -56,6 +68,11 @@ public class Account implements AccountRepo {
         return cards;
     }
 
+    /**
+     * Проверяет, существует счёт с таким id в базе
+     * @param id счета, наличие которого нужно проверить
+     * @return true, если такой сч>т найден, иначе false
+     */
     public static boolean ifExists(long id){
         try (PreparedStatement statement = con.prepareStatement("SELECT * FROM ACCOUNT WHERE ID = ?")) {
             statement.setLong(1, id);
@@ -67,6 +84,11 @@ public class Account implements AccountRepo {
         }
     }
 
+    /**
+     * Возвращает объект класса, найденный в базе по уникальному номеру
+     * @param num номер аккаунта для поиска в базе
+     * @return экзамепляр объекта с номером num
+     */
     public static Account getAccount(String num) {
         Account account = null;
         try {
@@ -87,6 +109,9 @@ public class Account implements AccountRepo {
         }
     }
 
+    /**
+     * Переопределение методов по умолчанию
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

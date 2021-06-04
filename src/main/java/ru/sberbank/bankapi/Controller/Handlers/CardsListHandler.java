@@ -2,7 +2,7 @@ package ru.sberbank.bankapi.Controller.Handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sberbank.bankapi.Service.UserServiceImpl;
+import ru.sberbank.bankapi.Service.ServiceImpl.UserServiceImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * Обработчик, отвечающий за манипуляции со списком карт клиента
+ * Сюда приходят GET запросы на вывод списка всех карт
+ * и POST запросы на добавление новой карты
+ */
 public class CardsListHandler implements HttpHandler {
 
     @Override

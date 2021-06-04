@@ -1,4 +1,4 @@
-package ru.sberbank.bankapi.Service.InterFaces;
+package ru.sberbank.bankapi.Service.Interfaces;
 
 import java.sql.SQLException;
 

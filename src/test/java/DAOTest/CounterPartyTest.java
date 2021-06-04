@@ -19,7 +19,7 @@ class CounterPartyTest {
     @BeforeAll
     public static void beforeAll() throws SQLException {
         createConnection();
-        dbInit();
+        dbCreate();
     }
 
     @Test

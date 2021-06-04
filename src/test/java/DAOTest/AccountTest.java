@@ -21,9 +21,10 @@ class AccountTest {
     @BeforeAll
     public static void beforeAll() throws SQLException {
         createConnection();
-        dbInit();
+        dbCreate();
         Statement statement = con.createStatement();
-        statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '0000', 100.1, 3 );");
+        statement.executeUpdate("INSERT INTO CLIENT (ID, LOGIN) VALUES ( 1, 'RITA' )");
+        statement.executeUpdate("INSERT INTO ACCOUNT (NUMBER, BALANCE, CLIENT_ID) VALUES ( '0000', 100.1, 1 );");
         statement.executeUpdate("INSERT INTO CARD (NUMBER, ACCOUNT_ID) VALUES ( '1000000000000000'," +
                 "(SELECT ID FROM ACCOUNT WHERE ACCOUNT.NUMBER = '0000'));");
         statement.executeUpdate("INSERT INTO CARD (NUMBER, ACCOUNT_ID) VALUES ( '2000000000000000'," +
